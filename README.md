@@ -61,6 +61,3 @@ completes.
 If a .nro file is not produced, run **buildShowLog.bat** which does not
 automatically close and will display build errors and warnings. This
 will provide hints as to why the build failed.
-
-## TODO
- - Generate puzzles
