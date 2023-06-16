@@ -191,6 +191,13 @@ void GridTile::Flip(bool withSound)
     }
 }
 
+/// @brief Get whether the tile is touched.
+/// @return true if touched. false if not.
+bool GridTile::IsTouched()
+{
+    return background->IsTouched();
+}
+
 /// @brief Update the tile.
 void GridTile::Update()
 {

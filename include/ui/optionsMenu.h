@@ -5,6 +5,14 @@
 
 #include <vector>
 
+// Indexes for the prompts
+#define PromptBack      0
+#define PromptToggle    1
+
+// Indexes for the values
+#define ValueSounds     0
+#define ValueMusic      1
+
 #ifndef OptionsMenu_H
 #define OptionsMenu_H
 
@@ -33,6 +41,8 @@ class OptionsMenu{
 
         static void UpdateMusic();
         static void UpdateSound();
+
+        void SelectOption(int index);
 };
 
 #endif // OptionsMenu_H

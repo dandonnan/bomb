@@ -37,6 +37,8 @@ class GridTile
         void Reset();
         void Flip(bool withSound = true);
 
+        bool IsTouched();
+
         void Update();
 
         void Draw();

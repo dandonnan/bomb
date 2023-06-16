@@ -30,6 +30,7 @@
     "HighlightedOption": "502,303,500,150",
     "ButtonSouth": "1,455,82,82",
     "ButtonEast": "86,455,82,82",
+    "ButtonPlus": "1,771,82,82",
     "PromptBackground": "174,455,350,100",
     "MarkedTile": "527,455,150,150",
     "MarkerSelector": "883,455,104,104",

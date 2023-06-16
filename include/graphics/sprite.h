@@ -1,4 +1,5 @@
 #include "../graphics/vector2.h"
+#include "../graphics/rectangle.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -18,6 +19,8 @@ class Sprite
 
         void SetPosition(Vector2 *position);
 
+        bool IsTouched();
+
         void Update();
 
         void Draw();
@@ -33,6 +36,8 @@ class Sprite
         SDL_Rect imagePosition;
         SDL_Rect sourcePosition;
         SDL_Renderer *renderer;
+
+        Rectangle *bounds;
 
         Vector2* screenPosition;
 };

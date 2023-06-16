@@ -14,6 +14,8 @@ class ButtonPrompt
         ButtonPrompt(std::string prompt, std::string icon, Vector2* position);
         ~ButtonPrompt();
 
+        bool IsTouched();
+
         void Draw();
 
     private:

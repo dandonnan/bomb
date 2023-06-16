@@ -3,6 +3,7 @@
 #define EVENT_CLOSEPAUSEMENU    "ClosePauseMenu"
 #define EVENT_CLOSEOPTIONSMENU  "CloseOptionsMenu"
 #define EVENT_CLOSEMARKERMENU   "CloseMarkerMenu"
+#define EVENT_TILECHANGED       "TileChanged"
 #define EVENT_GRIDCOMPLETE      "GridComplete"
 #define EVENT_MULTIPLYBY1       "x1"
 #define EVENT_MULTIPLYBY2       "x2"

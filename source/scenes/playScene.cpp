@@ -16,9 +16,12 @@ PlayScene::PlayScene(GameManager* game)
 
     background = GameFactory::GetSprite("data/images/background.png", new Vector2(0, 0));
 
-    flipPrompt = new ButtonPrompt(GameFactory::GetLocalisedString("HintFlip"), "ButtonEast", new Vector2(1550, 900));
-
-    markerPrompt = new ButtonPrompt(GameFactory::GetLocalisedString("HintMarker"), "ButtonSouth", new Vector2(1550, 750));
+    prompts =
+    {
+        new ButtonPrompt(GameFactory::GetLocalisedString("HintFlip"), "ButtonEast", new Vector2(1550, 900)),
+        new ButtonPrompt(GameFactory::GetLocalisedString("HintMarker"), "ButtonSouth", new Vector2(1550, 750)),
+        new ButtonPrompt(GameFactory::GetLocalisedString("Pause"), "ButtonPlus", new Vector2(1550, 50))
+    };
 
     markerMenu = new MarkerMenu();
 
@@ -40,9 +43,12 @@ PlayScene::~PlayScene()
 {
     delete background;
 
-    delete flipPrompt;
+    for (int i = 0; i < (int)prompts.size(); i++)
+    {
+        delete prompts.at(i);
+    }
 
-    delete markerPrompt;
+    prompts.clear();
 
     delete markerMenu;
 
@@ -113,10 +119,11 @@ void PlayScene::UpdateGame()
     // Update the grid
     grid->Update();
 
-    // If B is pressed, and the selected tile has not been flipped, open
-    // up the marking menu
-    if (InputManager::GetInstance()->IsInputPressed(BUTTON_SOUTH)
+    // If B is pressed and the selected tile has not been flipped, or the
+    // marker prompt has been touched, open up the marking menu
+    if ((InputManager::GetInstance()->IsInputPressed(BUTTON_SOUTH)
         && grid->GetCurrentTile()->IsFlipped() == false)
+        || prompts.at(PromptMark)->IsTouched())
     {
         AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuBack);
 
@@ -125,8 +132,15 @@ void PlayScene::UpdateGame()
         return;
     }
 
-    // If + is pressed, pause the game
-    if (InputManager::GetInstance()->IsInputPressed(BUTTON_PLUS))
+    // If the flip prompt is pressed, flip the currently selected tile
+    if (prompts.at(PromptFlip)->IsTouched())
+    {
+        grid->GetCurrentTile()->Flip();
+    }
+
+    // If + is pressed, or the prompt is touched, pause the game
+    if (InputManager::GetInstance()->IsInputPressed(BUTTON_PLUS)
+        || prompts.at(PromptPause)->IsTouched())
     {
         AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuBack);
 
@@ -176,6 +190,9 @@ void PlayScene::UpdateGame()
 /// @brief Update the game in the marker state.
 void PlayScene::UpdateMarker()
 {
+    // Update the grid
+    grid->UpdateInMarkerMode();
+
     // Update the marker menu
     markerMenu->Update();
 
@@ -190,12 +207,19 @@ void PlayScene::UpdateMarker()
     }
 
     // If the marker menu has been closed, return to the game
-    if (EventManager::GetInstance()->HasEventFiredThenKill(EVENT_CLOSEMARKERMENU))
+    if (EventManager::GetInstance()->HasEventFiredThenKill(EVENT_CLOSEMARKERMENU)
+        || prompts.at(PromptMark)->IsTouched())
     {
         AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuBack);
 
         state = Playing;
         return;
+    }
+
+    // If the selected tile has changed, update the tile used in the marker menu
+    if (EventManager::GetInstance()->HasEventFiredThenKill(EVENT_TILECHANGED))
+    {
+        markerMenu->SetTile(grid->GetCurrentTile());
     }
 }
 
@@ -238,8 +262,10 @@ void PlayScene::UpdateGameOver()
 /// @brief Draw button prompts.
 void PlayScene::DrawPrompts()
 {
-    flipPrompt->Draw();
-    markerPrompt->Draw();
+    for (int i = 0; i < (int)prompts.size(); i++)
+    {
+        prompts.at(i)->Draw();
+    }
 }
 
 /// @brief Draw the game in the marker state.

@@ -64,18 +64,19 @@ void OptionsMenu::Update()
     // If sound has been toggled then update the value
     if (EventManager::GetInstance()->HasEventFiredThenKill(EVENT_SOUNDTOGGLED))
     {
-        values.at(0)->UpdateText(SaveManager::GetInstance()->Data()->SoundOn() ? on : off);
+        values.at(ValueSounds)->UpdateText(SaveManager::GetInstance()->Data()->SoundOn() ? on : off);
     }
 
     // If music has been toggled then update the value
     if (EventManager::GetInstance()->HasEventFiredThenKill(EVENT_MUSICTOGGLED))
     {
-        values.at(1)->UpdateText(SaveManager::GetInstance()->Data()->MusicOn() ? on : off);
+        values.at(ValueMusic)->UpdateText(SaveManager::GetInstance()->Data()->MusicOn() ? on : off);
     }
 
-    // If + or B is pressed, close the options menu
+    // If + or B is pressed, or the back button is touched, close the options menu
     if (InputManager::GetInstance()->IsInputPressed(BUTTON_PLUS)
-        || InputManager::GetInstance()->IsInputPressed(BUTTON_SOUTH))
+        || InputManager::GetInstance()->IsInputPressed(BUTTON_SOUTH)
+        || prompts.at(PromptBack)->IsTouched())
     {
         Close();
         return;
@@ -106,13 +107,26 @@ void OptionsMenu::Update()
         return;
     }
 
-    // If A is pressed, select the option
-    if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST))
+    // If A is pressed, or the select button is touched, select the option
+    if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST)
+        || prompts.at(PromptToggle)->IsTouched())
     {
-        AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuSelect);
-
-        options.at(currentOption)->Select();
+        SelectOption(currentOption);
         return;
+    }
+
+    // Go through options to check if they are touched, and select if they are
+    for (int i = 0; i < (int)options.size(); i++)
+    {
+        if (options.at(i)->IsTouched())
+        {
+            options[currentOption]->Highlight(false);
+            currentOption = i;
+            options[currentOption]->Highlight();
+            
+            SelectOption(i);
+            return;
+        }
     }
 }
 
@@ -169,4 +183,13 @@ void OptionsMenu::UpdateSound()
     AudioManager::GetInstance()->PlaySoundEffect("MenuMove");
 
     EventManager::GetInstance()->FireEvent(EVENT_SOUNDTOGGLED);
+}
+
+/// @brief Select the option at the index.
+/// @param index The index.
+void OptionsMenu::SelectOption(int index)
+{
+    AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuSelect);
+    
+    options.at(index)->Select();
 }

@@ -6,6 +6,8 @@
 
 #include "../graphics/vector2.h"
 
+#include "../graphics/displayText.h"
+
 #include <string>
 #include <vector>
 
@@ -31,6 +33,8 @@ class Grid
         void FlipAll();
 
         void Update();
+        void UpdateInMarkerMode();
+
         void Draw();
 
     private:
@@ -54,6 +58,8 @@ class Grid
         void PlaceTiles(Vector2* position);
 
         void HandleMovement();
+        void HandleFlip();
+        void HandleTouchInput(bool markOnly = false);
 
         void CheckForGridCompletion();
 

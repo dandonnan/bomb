@@ -102,6 +102,7 @@ void MenuScene::UpdateMenu()
         options.at(currentOption)->Highlight(false);
         currentOption = currentOption == 0 ? (int)options.size() - 1 : currentOption - 1;
         options.at(currentOption)->Highlight();
+        return;
     }
 
     if (InputManager::GetInstance()->IsInputPressed(BUTTON_DOWN)
@@ -112,14 +113,25 @@ void MenuScene::UpdateMenu()
         options.at(currentOption)->Highlight(false);
         currentOption = currentOption == (int)options.size() - 1 ? 0 : currentOption + 1;
         options.at(currentOption)->Highlight();
+        return;
     }
 
     // If A is pressed, select the option
-    if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST))
+    if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST)
+        || selectPrompt->IsTouched())
     {
-        AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuSelect);
+        SelectOption(currentOption);
+        return;
+    }
 
-        options.at(currentOption)->Select();
+    // Cycle through options to see if they have been touched
+    for (int i = 0; i < (int)options.size(); i++)
+    {
+        if (options.at(i)->IsTouched())
+        {
+            SelectOption(i);
+            return;
+        }
     }
 }
 
@@ -183,4 +195,13 @@ void MenuScene::Play5x5()
 void MenuScene::ShowOptions()
 {
     instance->showingOptions = true;
+}
+
+/// @brief Select the option at the given index.
+/// @param index The index.
+void MenuScene::SelectOption(int index)
+{
+    AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuSelect);
+
+    options.at(index)->Select();
 }

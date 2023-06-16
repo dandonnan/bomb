@@ -8,8 +8,11 @@ class Vector2
         Vector2();
         Vector2(int x, int y);
         ~Vector2();
+
         int X();
         int Y();
+
+        void Move(int x, int y);
 
     private:
         int x;

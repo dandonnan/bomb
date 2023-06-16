@@ -4,6 +4,8 @@
 
 #include "../../include/system/sdlLibrary.h"
 
+#include "../../include/system/inputManager.h"
+
 /// @brief Create a new sprite using an entire texture as the image.
 /// @param file The name of the texture file.
 /// @param position The position to place the sprite.
@@ -25,6 +27,8 @@ Sprite::Sprite(std::string file, Vector2* position)
         this->renderer = SDLLibrary::GetInstance()->GetRenderer();
 
         sourcePosition = {0, 0, img->w, img->h};
+
+        bounds = new Rectangle(imagePosition);
     }
 }
 
@@ -49,6 +53,8 @@ Sprite::Sprite(std::string file, Vector2* position, SDL_Rect source)
 
         this->renderer = SDLLibrary::GetInstance()->GetRenderer();
         sourcePosition = source;
+
+        bounds = new Rectangle(imagePosition);
     }
 }
 
@@ -56,6 +62,8 @@ Sprite::Sprite(std::string file, Vector2* position, SDL_Rect source)
 Sprite::~Sprite()
 {
     delete screenPosition;
+
+    delete bounds;
 }
 
 /// @brief Set the position of the sprite.
@@ -63,6 +71,8 @@ Sprite::~Sprite()
 void Sprite::SetPosition(Vector2* position)
 {
     imagePosition = {position->X(), position->Y(), imagePosition.w, imagePosition.h};
+
+    bounds->Move(new Vector2(position->X(), position->Y()));
 }
 
 /// @brief Get the position of the sprite.
@@ -91,6 +101,13 @@ int Sprite::GetWidth()
 int Sprite::GetHeight()
 {
     return sourcePosition.h;
+}
+
+/// @brief Get whether the sprite has been touched on the touch screen.
+/// @return true if touched. false if not.
+bool Sprite::IsTouched()
+{
+    return bounds->Contains(InputManager::GetInstance()->GetTouchPosition());
 }
 
 /// @brief Update the sprite.

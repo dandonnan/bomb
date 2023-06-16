@@ -74,8 +74,6 @@ Grid::~Grid()
 /// @param level The current level.
 void Grid::Reset(int level)
 {
-    tiles[tileX][tileY]->Highlight(false);
-
     for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < size; j++)
@@ -123,6 +121,15 @@ void Grid::Update()
 
     // Handle movement input
     HandleMovement();
+
+    // Handle tile flips
+    HandleFlip();
+}
+
+/// @brief Update the grid, but only allow marking.
+void Grid::UpdateInMarkerMode()
+{
+    HandleTouchInput(true);
 }
 
 /// @brief Draw the grid.
@@ -345,13 +352,57 @@ void Grid::HandleMovement()
         tiles[tileX][tileY]->Highlight();
         return;
     }
+}
 
+/// @brief Handle tiles being flipped.
+void Grid::HandleFlip()
+{
     // If the A button is pressed, then flip the tile
     if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST))
     {
         tiles[tileX][tileY]->Flip();
         CheckForGridCompletion();
         return;
+    }
+
+    HandleTouchInput();
+}
+
+/// @brief Handle touch input on the grid.
+/// @param markOnly Whether or not tiles can only be marked.
+void Grid::HandleTouchInput(bool markOnly)
+{
+    // Check touch input on each tile, and flip if selected
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            // If a tile is touched
+            if (tiles[i][j]->IsTouched())
+            {
+                // Remove highlight from the current tile (even if the same)
+                tiles[tileX][tileY]->Highlight(false);
+                
+                // Update the current selection to match the tile that is touched
+                tileX = i;
+                tileY = j;
+
+                // Highlight the tile
+                tiles[i][j]->Highlight();
+
+                if (markOnly)
+                {
+                    EventManager::GetInstance()->FireEvent(EVENT_TILECHANGED);
+                }
+                else
+                {
+                    // Flip the tile and check if the grid is completed
+                    tiles[i][j]->Flip();
+                    CheckForGridCompletion();
+                }                
+                return;
+            }
+        }
     }
 }
 
@@ -389,15 +440,17 @@ void Grid::GenerateGridValues(int level)
     int maxTiles = (size * size) - size;
 
     // Set the number of slots to fill up with non-1 values to a random number between the two ranges
-    int freeSlots = rand() % maxTiles + minTiles;
+    int freeSlots = rand() % minTiles + maxTiles;
 
     // Note: This code doesn't do what it is intended to do and sometimes
     // bombs will not be filled when they are supposed to. Maybe I will
     // come back and fix it at some point, but the game is based on chance
     // anyway so players can just take the W.
 
+    double multiplier = 1 + ((level - 1) / 10);
+
     // Set the number of bombs to fill to be a random number between 
-    int bombsToFill = rand() % freeSlots + (level / 2);
+    int bombsToFill = rand() % (int)(size * multiplier);
 
     int ignoreColumn = -1;
     int ignoreRow = -1;
@@ -446,9 +499,9 @@ void Grid::PlaceValuesInGrid(TileValue value, int amount, int excludeRow, int ex
 {
     for (int i = 0; i < size; i++)
     {
-        int numberOnRow = excludeRow == i ? 0 :
-                            i == size - 1 ? amount :
-                            rand() % amount + 1;
+        int numberOnRow = i == size - 1 ? amount :
+                            excludeRow == i ? 0 :
+                            rand() % amount;
 
         while (numberOnRow > 0)
         {
@@ -465,7 +518,7 @@ void Grid::PlaceValuesInGrid(TileValue value, int amount, int excludeRow, int ex
             {
                 for (int j = 0; j < size; j++)
                 {
-                    if (tiles[j][i]->GetValue() != One
+                    if (tiles[j][i]->GetValue() == One
                         && excludeColumn != j)
                     {
                         tiles[j][i]->SetValue(value);

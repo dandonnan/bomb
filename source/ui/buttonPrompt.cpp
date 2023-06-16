@@ -24,6 +24,13 @@ ButtonPrompt::~ButtonPrompt()
     delete text;
 }
 
+/// @brief Get whether the button prompt has been touched.
+/// @return true if touched. false if not.
+bool ButtonPrompt::IsTouched()
+{
+    return background->IsTouched();
+}
+
 /// @brief Draw the button prompt.
 void ButtonPrompt::Draw()
 {

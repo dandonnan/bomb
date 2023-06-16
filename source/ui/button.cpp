@@ -14,8 +14,6 @@ Button::Button(Sprite *icon, std::function<void()> onSelected, Sprite *highlight
     this->highlight = highlight;
 
     highlighted = false;
-
-    bounds = new Rectangle((int)icon->GetPosition()->X(), (int)icon->GetPosition()->Y(), icon->GetWidth(), icon->GetHeight());
 }
 
 /// @brief Destroy the button.
@@ -24,8 +22,6 @@ Button::~Button()
     delete icon;
 
     delete highlight;
-
-    delete bounds;
 }
 
 /// @brief Highlight the button.
@@ -50,8 +46,7 @@ void Button::Select()
 /// @return true if touched. false if not.
 bool Button::IsTouched()
 {
-    return InputManager::GetInstance()->IsTouched()
-            && bounds->Contains(InputManager::GetInstance()->GetTouchPosition());
+    return icon->IsTouched();
 }
 
 /// @brief Update the button.

@@ -85,8 +85,9 @@ void LevelEndScreen::UpdateReveal()
 /// @brief Update when displaying the message.
 void LevelEndScreen::UpdateMessage()
 {
-    // If A is pressed
-    if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST))
+    // If A is pressed or the touch screen is touched
+    if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST)
+        || InputManager::GetInstance()->IsTouched())
     {
         AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuSelect);
 
@@ -99,8 +100,9 @@ void LevelEndScreen::UpdateMessage()
 /// @brief Update before resetting the grid.
 void LevelEndScreen::UpdateReset()
 {
-    // If A is pressed
-    if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST))
+    // If A is pressed or the touch screen is touched
+    if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST)
+        || InputManager::GetInstance()->IsTouched())
     {
         AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuSelect);        
 

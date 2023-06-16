@@ -34,3 +34,7 @@
 
 #define SCREEN_WIDTH_DOCKED     1920
 #define SCREEN_HEIGHT_DOCKED    1080
+
+// The game renders at 1920x1080, but the touch screen
+// is 1280x720 so positions need scaling for input
+#define SCREEN_TOUCH_MULTIPLIER       1.5

@@ -10,6 +10,7 @@
     "OptionMusic": "Music",
     "OptionOn": "On",
     "OptionOff": "Off",
+    "Pause": "Pause",
     "PauseResume": "Resume",
     "PauseQuit": "Return to Menu",
     "Level": "Level {0}",

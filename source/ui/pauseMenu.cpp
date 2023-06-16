@@ -126,12 +126,11 @@ void PauseMenu::UpdatePause()
         return;
     }
 
-    // If A is pressed, select the current option
-    if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST))
+    // If A is pressed, or the select button is touched, select the current option
+    if (InputManager::GetInstance()->IsInputPressed(BUTTON_EAST)
+        || selectPrompt->IsTouched())
     {
-        AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuSelect);
-
-        options.at(currentOption)->Select();
+        SelectOption(currentOption);
         return;
     }
 
@@ -141,6 +140,20 @@ void PauseMenu::UpdatePause()
     {        
         Resume();
         return;
+    }
+
+    // Go through each option to see if it has been touched, and select the option if it has
+    for (int i = 0; i < (int)options.size(); i++)
+    {
+        if (options.at(i)->IsTouched())
+        {
+            options[currentOption]->Highlight(false);
+            currentOption = i;
+            options[currentOption]->Highlight();
+            
+            SelectOption(i);
+            return;
+        }
     }
 }
 
@@ -174,4 +187,13 @@ void PauseMenu::ShowOptions()
 void PauseMenu::ReturnToMenu()
 {
     instance->gameManager->ChangeScene(Menu);
+}
+
+/// @brief Select the option at the given index.
+/// @param index The index.
+void PauseMenu::SelectOption(int index)
+{
+    AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuSelect);
+
+    options.at(index)->Select();
 }

@@ -12,7 +12,14 @@
 #include "../ui/levelEndScreen.h"
 #include "../ui/scoreWindow.h"
 
+#include <vector>
+
 #define MaxLevel    10  // The highest level
+
+// Indexes of the prompts
+#define PromptFlip  0
+#define PromptMark  1
+#define PromptPause 2
 
 #ifndef PlayScene_H
 #define PlayScene_H
@@ -43,8 +50,7 @@ class PlayScene : public Scene
         LevelEndScreen *levelEndScreen;
         ScoreWindow *scoreWindow;
 
-        ButtonPrompt *flipPrompt;
-        ButtonPrompt *markerPrompt;
+        std::vector<ButtonPrompt*> prompts;
 
         int level;
         int score;

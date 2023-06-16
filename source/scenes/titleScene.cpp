@@ -46,7 +46,8 @@ void TitleScene::Update()
 {
     // If + or A are pressed, go to the main menu
     if (InputManager::GetInstance()->IsInputPressed(BUTTON_PLUS)
-        || InputManager::GetInstance()->IsInputPressed(BUTTON_EAST))
+        || InputManager::GetInstance()->IsInputPressed(BUTTON_EAST)
+        || InputManager::GetInstance()->IsTouched())
     {
         AudioManager::GetInstance()->PlaySoundEffect(Sound_MenuSelect);
         gameManager->ChangeScene(Menu);

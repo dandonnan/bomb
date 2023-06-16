@@ -45,6 +45,8 @@ class PauseMenu
         static void Resume();
         static void ShowOptions();
         static void ReturnToMenu();
+
+        void SelectOption(int index);
 };
 
 #endif // PauseMenu_H

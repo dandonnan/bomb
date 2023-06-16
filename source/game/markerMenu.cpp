@@ -106,6 +106,18 @@ void MarkerMenu::Update()
         gridTile->ToggleMark((TileValue)selectedTile);
         return;
     }
+
+    // If a marking tile is touched, toggle the marking on that tile
+    for (int i = 0; i<TotalMarkings; i++)
+    {
+        if (tiles[i]->IsTouched())
+        {
+            selectedTile = i;
+            selectorPosition = GetSelectorPosition();
+            gridTile->ToggleMark((TileValue)selectedTile);
+            return;
+        }
+    }
 }
 
 /// @brief Draw the marker menu.

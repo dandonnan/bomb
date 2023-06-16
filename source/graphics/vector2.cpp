@@ -33,3 +33,12 @@ int Vector2::Y()
 {
     return y;
 }
+
+/// @brief Move the position to the new co-ordinates.
+/// @param x The x co-ordinate.
+/// @param y The y co-ordinate.
+void Vector2::Move(int x, int y)
+{
+    this->x = x;
+    this->y = y;
+}

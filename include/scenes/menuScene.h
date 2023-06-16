@@ -47,6 +47,8 @@ class MenuScene : public Scene
         static void Play5x5();
 
         static void ShowOptions();
+
+        void SelectOption(int index);
 };
 
 #endif // MenuScene_H

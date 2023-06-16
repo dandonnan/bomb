@@ -1,5 +1,4 @@
 #include "../graphics/sprite.h"
-#include "../graphics/rectangle.h"
 
 #include <functional>
 
@@ -21,7 +20,6 @@ class Button
     protected:
         Sprite *icon;
         Sprite *highlight;
-        Rectangle *bounds;
         bool highlighted;
         std::function<void()> onSelected;
 };
