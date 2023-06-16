@@ -6,6 +6,8 @@ It's like Voltorb Flip except Voltorb is now a bomb.
     - [**Controls**](#controls)
 - [**Building**](#building)
 
+<img src="https://raw.githubusercontent.com/dandonnan/bomb/main/screenshot.png" width="600px">
+
 ## How to Play
 The objective of **Bomb Flip** is to flip all the tiles with values of **2** and **3**
 and avoid flipping tiles with a **Bomb**.
@@ -35,6 +37,8 @@ To play with an emulator, launch the emulator and then drag the **bombflip.nro**
 file onto it.
 
 ### Controls
+The touch screen can be used to interact with most elements on screen when playing
+in handheld mode. Button inputs work in both handheld and docked mode.
 
 | Button | Action |
 | --- | --- |
