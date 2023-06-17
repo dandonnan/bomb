@@ -3,6 +3,8 @@ It's like Voltorb Flip except Voltorb is now a bomb.
 
 - [**How to Play**](#how-to-play) 
     - [**Running**](#running)
+        - [**Hardware**](#hardware)
+        - [**Emulator**](#emulator)
     - [**Controls**](#controls)
 - [**Building**](#building)
 
@@ -30,9 +32,11 @@ The Marking Menu can also be used to indicate other values on the tiles.
 The game can be played via a Switch emulator, like **Yuzu**, or on a Nintendo
 Switch capable of running homebrew.
 
+#### Hardware
 To play on Switch hardware, copy the **bombflip.nro** file onto the SD card
 and launch through the system's custom firmware.
 
+#### Emulator
 To play with an emulator, launch the emulator and then drag the **bombflip.nro**
 file onto it.
 

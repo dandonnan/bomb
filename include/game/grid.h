@@ -6,8 +6,6 @@
 
 #include "../graphics/vector2.h"
 
-#include "../graphics/displayText.h"
-
 #include <string>
 #include <vector>
 

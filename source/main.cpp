@@ -23,7 +23,7 @@
 #include "../../include/events/eventManager.h"
 #include "../../include/events/knownEvents.h"
 
-#define VersionNumber   "1.0.1"       // The game's version number
+#define VersionNumber   "1.0.2"       // The game's version number
 
 int quit = 0;
 int refreshRate = 24;

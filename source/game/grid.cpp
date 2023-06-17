@@ -10,6 +10,8 @@
 #include "../../include/events/eventManager.h"
 #include "../../include/events/knownEvents.h"
 
+#include <ctime>
+
 /// @brief Create a new grid.
 /// @param size The size of the grid.
 Grid::Grid(int size)
@@ -430,28 +432,24 @@ void Grid::CheckForGridCompletion()
 /// @param level The current level.
 void Grid::GenerateGridValues(int level)
 {
-    // Set the minimum number of tiles to have a non-1 value
-    // This should be the size of the grid + 1 (so 3x3 = 4, 4x4 = 5, 5x5 = 6)
-    int minTiles = size + 1;
+    // Set a seed for random numbers
+    srand(std::time(nullptr));
 
     // Set the maximum number of tiles that can have a non-1 value
     // This should be the total tiles in the grid minus the grid's size
     // (so 3x3 = 6, 4x4 = 12, 5x5 = 20)
     int maxTiles = (size * size) - size;
 
-    // Set the number of slots to fill up with non-1 values to a random number between the two ranges
-    int freeSlots = rand() % minTiles + maxTiles;
+    // Get a multiplier that scales up by the current level from 1.0 to 1.9
+    double multiplier = 1 + ((double)(level - 1) / 10);
 
-    // Note: This code doesn't do what it is intended to do and sometimes
-    // bombs will not be filled when they are supposed to. Maybe I will
-    // come back and fix it at some point, but the game is based on chance
-    // anyway so players can just take the W.
+    // Set the number of bombs to fill to be a random number between 2 and the
+    // grid's size multiplied by the multiplier
+    int bombsToFill = rand() % ((int)(size * multiplier)) + 2;
 
-    double multiplier = 1 + ((level - 1) / 10);
-
-    // Set the number of bombs to fill to be a random number between 
-    int bombsToFill = rand() % (int)(size * multiplier);
-
+    // Set ignore values to a default of -1, meaning they won't be used
+    // When set to 0 or above, the grid will try not to populate in that
+    // row / column
     int ignoreColumn = -1;
     int ignoreRow = -1;
 
@@ -477,16 +475,25 @@ void Grid::GenerateGridValues(int level)
             break;
     }
 
-    // Get a random number of x2 values to set, by removing the number of bombs from the free slots
-    int x2ToFill = rand() % (freeSlots - bombsToFill);
+    // Get the number of x2 values to set
+    // If the number of bombs does not exceed the maximum number of tiles to fill, then
+    // a random number between 1 and the number of remaining tiles will be set.
+    // Otherwise, at least 1 tile will be set to x2 - even though the maximum has been
+    // exceeded - so that the player has to flip at least 1 tile.
+    int x2ToFill = maxTiles - bombsToFill > 0 ? rand() % (maxTiles - bombsToFill) + 1 : 1;
 
-    // Get a random number of x3 values to set, by removing the number slots already taken
-    int x3ToFill = rand() % (freeSlots - bombsToFill - x2ToFill);
+    // Get the number of x3 values to set
+    // If the number of bombs plus the number of x2 values does not exceed the maximum
+    // number of tiles to fill, then a random number between 1 and the number of remaining
+    // tiles will be set. Otherwise, there will be 0 x3 values.
+    int x3ToFill = maxTiles - bombsToFill - x2ToFill > 0 ? rand() % (maxTiles - bombsToFill - x2ToFill) + 1 : 0;
 
+    // Place each of the value types into the grid, using the random numbers generated
     PlaceValuesInGrid(Bomb, bombsToFill, ignoreColumn, ignoreRow);
     PlaceValuesInGrid(Two, x2ToFill);
     PlaceValuesInGrid(Three, x3ToFill);
 
+    // Put the totals of each row and column into the header tiles
     SetValuesInHeaders();
 }
 
@@ -501,7 +508,7 @@ void Grid::PlaceValuesInGrid(TileValue value, int amount, int excludeRow, int ex
     {
         int numberOnRow = i == size - 1 ? amount :
                             excludeRow == i ? 0 :
-                            rand() % amount;
+                            amount > 0 ? rand() % amount + 1 : 0;
 
         while (numberOnRow > 0)
         {

@@ -15,7 +15,7 @@
     "PauseQuit": "Return to Menu",
     "Level": "Level {0}",
     "ScoreLevel": "Level Score: {0}",
-    "ScoreTotal": "Total Score: {0}",
+    "ScoreTotal": "Total Score:",
     "HintFlip": "Flip",
     "HintMarker": "Marker",
     "HintSelect": "Select",

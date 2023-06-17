@@ -15,7 +15,8 @@ ScoreWindow::ScoreWindow()
     {
         GameFactory::GetText(ReplaceText(GameFactory::GetLocalisedString("Level"), "1"), 30, new Vector2(60, 430)),
         GameFactory::GetText(ReplaceText(GameFactory::GetLocalisedString("ScoreLevel"), "0"), 30, new Vector2(60, 526)),
-        GameFactory::GetText(ReplaceText(GameFactory::GetLocalisedString("ScoreTotal"), "0"), 30, new Vector2(60, 622))
+        GameFactory::GetText(GameFactory::GetLocalisedString("ScoreTotal"), 30, new Vector2(60, 600)),
+        GameFactory::GetText("0", 30, new Vector2(60, 635))
     };
 }
 
@@ -43,7 +44,7 @@ void ScoreWindow::SetLevel(int level)
 void ScoreWindow::UpdateScore(int score, int total)
 {
     text.at(1)->UpdateText(ReplaceText(GameFactory::GetLocalisedString("ScoreLevel"), std::to_string(score)));
-    text.at(2)->UpdateText(ReplaceText(GameFactory::GetLocalisedString("ScoreTotal"), std::to_string(total)));
+    text.at(3)->UpdateText(std::to_string(total));
 }
 
 void ScoreWindow::Draw()

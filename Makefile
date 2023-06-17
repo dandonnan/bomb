@@ -46,7 +46,7 @@ ROMFS		:=	romfs
 
 APP_TITLE	:=	Bomb Flip
 APP_AUTHOR	:=	Dan Donnan
-APP_VERSION	:=	1.0.1
+APP_VERSION	:=	1.0.2
 
 #---------------------------------------------------------------------------------
 # options for code generation
