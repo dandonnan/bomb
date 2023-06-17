@@ -2,6 +2,9 @@
 
 ## [1.0.2] - 2023-06-17
 
+### Updated
+- Changed the display of the Total Score to be on two lines
+
 ### Fixed
 - Fixed grid generation to work as intended (or close enough)
 
